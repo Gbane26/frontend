@@ -10,52 +10,107 @@ import { Task } from '../index';
 const TodoPage = () => {
   const api = useFetch();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [editedTasks, setEditedTasks] = useState<Record<number, string>>({});
+  const [newTaskName, setNewTaskName] = useState('');
 
-  const handleFetchTasks = async () => setTasks(await api.get('/tasks'));
+  const handleFetchTasks = async () => {
+    const data = await api.get('/tasks');
+    setTasks(data);
+  };
 
   const handleDelete = async (id: number) => {
-    // @todo IMPLEMENT HERE : DELETE THE TASK & REFRESH ALL THE TASKS, DON'T FORGET TO ATTACH THE FUNCTION TO THE APPROPRIATE BUTTON
-  }
+    await api.delete(`/tasks/${id}`);
+    handleFetchTasks();
+  };
 
-  const handleSave = async () => {
-    // @todo IMPLEMENT HERE : SAVE THE TASK & REFRESH ALL THE TASKS, DON'T FORGET TO ATTACH THE FUNCTION TO THE APPROPRIATE BUTTON
-  }
+  const handleSave = async (id: number) => {
+    const updatedName = editedTasks[id];
+    const originalTask = tasks.find((t) => t.id === id);
+
+    if (updatedName && updatedName !== originalTask?.name) {
+      await api.patch(`/tasks/${id}`, {id, name: updatedName });
+      setEditedTasks((prev) => {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      });
+      handleFetchTasks();
+    }
+  };
+
+  const handleAddTask = async () => {
+    if (!newTaskName.trim()) return;
+    const newTask = await api.post('/tasks', { name: newTaskName });
+    setTasks((prev) => [...prev, newTask]);
+    setNewTaskName('');
+  };
 
   useEffect(() => {
-    (async () => {
-      handleFetchTasks();
-    })();
+    handleFetchTasks();
   }, []);
 
   return (
     <Container>
       <Box display="flex" justifyContent="center" mt={5}>
-        <Typography variant="h2">HDM Todo List</Typography>
+        <Typography variant="h4">HDM Todo List</Typography>
       </Box>
 
-      <Box justifyContent="center" mt={5} flexDirection="column">
-        {
-          tasks.map((task) => (
-            <Box display="flex" justifyContent="center" alignItems="center" mt={2} gap={1} width="100%">
-              <TextField size="small" value={task.name} fullWidth sx={{ maxWidth: 350 }} />
-              <Box>
-                <IconButton color="success" disabled>
-                  <Check />
-                </IconButton>
-                <IconButton color="error" onClick={() => {}}>
-                  <Delete />
-                </IconButton>
-              </Box>
-            </Box>
-          ))
-        }
+      {/* Ajouter une nouvelle tâche */}
+      <Box display="flex" justifyContent="center" alignItems="center" mt={4} gap={2}>
+        <TextField
+          label="Nouvelle tâche"
+          variant="outlined"
+          size="small"
+          value={newTaskName}
+          onChange={(e) => setNewTaskName(e.target.value)}
+          sx={{ width: '300px' }}
+        />
+        <Button variant="contained" onClick={handleAddTask}>Ajouter</Button>
+      </Box>
 
-        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-          <Button variant="outlined" onClick={() => {}}>Ajouter une tâche</Button>
-        </Box>
+      {/* Liste des tâches */}
+      <Box mt={5} display="flex" flexDirection="column" alignItems="center">
+        {tasks.map((task) => {
+          const editedName = editedTasks[task.id] ?? task.name;
+          const hasChanged = editedName !== task.name;
+
+          return (
+            <Box
+              key={task.id}
+              display="flex"
+              alignItems="center"
+              gap={1}
+              mt={2}
+              width="100%"
+              maxWidth={500}
+            >
+              <TextField
+                size="small"
+                fullWidth
+                value={editedName}
+                onChange={(e) =>
+                  setEditedTasks((prev) => ({ ...prev, [task.id]: e.target.value }))
+                }
+              />
+              <IconButton
+                color="success"
+                disabled={!hasChanged}
+                onClick={() => handleSave(task.id)}
+              >
+                <Check />
+              </IconButton>
+              <IconButton
+                color="error"
+                onClick={() => handleDelete(task.id)}
+              >
+                <Delete />
+              </IconButton>
+            </Box>
+          );
+        })}
       </Box>
     </Container>
   );
-}
+};
 
 export default TodoPage;
