@@ -12,6 +12,7 @@ const TodoPage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [editedTasks, setEditedTasks] = useState<Record<number, string>>({});
   const [newTaskName, setNewTaskName] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // 🔍
 
   const handleFetchTasks = async () => {
     const data = await api.get('/tasks');
@@ -28,7 +29,7 @@ const TodoPage = () => {
     const originalTask = tasks.find((t) => t.id === id);
 
     if (updatedName && updatedName !== originalTask?.name) {
-      await api.patch(`/tasks/${id}`, {id, name: updatedName });
+      await api.patch(`/tasks/${id}`, { id, name: updatedName });
       setEditedTasks((prev) => {
         const updated = { ...prev };
         delete updated[id];
@@ -55,6 +56,18 @@ const TodoPage = () => {
         <Typography variant="h4">HDM Todo List</Typography>
       </Box>
 
+      {/* Champ de recherche */}
+      <Box display="flex" justifyContent="center" mt={3}>
+        <TextField
+          label="Rechercher une tâche"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ width: '300px' }}
+        />
+      </Box>
+
       {/* Ajouter une nouvelle tâche */}
       <Box display="flex" justifyContent="center" alignItems="center" mt={4} gap={2}>
         <TextField
@@ -68,46 +81,48 @@ const TodoPage = () => {
         <Button variant="contained" onClick={handleAddTask}>Ajouter</Button>
       </Box>
 
-      {/* Liste des tâches */}
+      {/* Liste des tâches filtrées */}
       <Box mt={5} display="flex" flexDirection="column" alignItems="center">
-        {tasks.map((task) => {
-          const editedName = editedTasks[task.id] ?? task.name;
-          const hasChanged = editedName !== task.name;
+        {tasks
+          .filter(task => task.name.toLowerCase().includes(searchTerm.toLowerCase()))
+          .map((task) => {
+            const editedName = editedTasks[task.id] ?? task.name;
+            const hasChanged = editedName !== task.name;
 
-          return (
-            <Box
-              key={task.id}
-              display="flex"
-              alignItems="center"
-              gap={1}
-              mt={2}
-              width="100%"
-              maxWidth={500}
-            >
-              <TextField
-                size="small"
-                fullWidth
-                value={editedName}
-                onChange={(e) =>
-                  setEditedTasks((prev) => ({ ...prev, [task.id]: e.target.value }))
-                }
-              />
-              <IconButton
-                color="success"
-                disabled={!hasChanged}
-                onClick={() => handleSave(task.id)}
+            return (
+              <Box
+                key={task.id}
+                display="flex"
+                alignItems="center"
+                gap={1}
+                mt={2}
+                width="100%"
+                maxWidth={500}
               >
-                <Check />
-              </IconButton>
-              <IconButton
-                color="error"
-                onClick={() => handleDelete(task.id)}
-              >
-                <Delete />
-              </IconButton>
-            </Box>
-          );
-        })}
+                <TextField
+                  size="small"
+                  fullWidth
+                  value={editedName}
+                  onChange={(e) =>
+                    setEditedTasks((prev) => ({ ...prev, [task.id]: e.target.value }))
+                  }
+                />
+                <IconButton
+                  color="success"
+                  disabled={!hasChanged}
+                  onClick={() => handleSave(task.id)}
+                >
+                  <Check />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  onClick={() => handleDelete(task.id)}
+                >
+                  <Delete />
+                </IconButton>
+              </Box>
+            );
+          })}
       </Box>
     </Container>
   );
