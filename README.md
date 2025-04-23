@@ -84,12 +84,12 @@ Quelques ajustements nécessaires dans le typage des DTO côté NestJS
 Gestion des états dans le frontend un peu tricky avec l’édition en ligne
 
 ## 📹 Démonstration
-👉 Vidéo de démonstration ici : (https://drive.google.com/file/d/1OUJ7Ngx3zgChssA58uuzUG8ZL_8orGp-/view?usp=sharing)
+👉 Vidéo de démonstration : [ici](https://drive.google.com/file/d/1OUJ7Ngx3zgChssA58uuzUG8ZL_8orGp-/view?usp=sharing)
 
 ## 📂 Repos GitHub
-Frontend(https://github.com/Gbane26/frontend)
+[Frontend](https://github.com/Gbane26/frontend)
 
-Backend(https://github.com/Gbane26/backend)
+[Backend](https://github.com/Gbane26/backend)
 
 ## 🙏 Remerciements
 Merci pour ce test enrichissant qui m’a permis de combiner développement frontend & backend avec une stack moderne.
