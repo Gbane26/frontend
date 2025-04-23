@@ -21,7 +21,7 @@ Application de gestion de tâches réalisée en React (frontend) et NestJS (back
 
 ### 1. Lancer la base MySQL
 Ayant XAMPP en local, j'ai activé et modifier le fichier .env
-```
+
 ### 2. Back End
 
 ```bash
@@ -52,6 +52,7 @@ Backend (NestJS)
 ✅ Suppression de tâche (DELETE /tasks/:id – déjà existante)
 
 Frontend (React)
+
 ✅ Affichage de la liste des tâches
 
 ✅ Création de tâche via un formulaire
