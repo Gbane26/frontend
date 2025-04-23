@@ -40,7 +40,7 @@ yarn install
 yarn dev
 ``` 
 
-### 4. Fonctionnalités
+## ✅ Fonctionnalités
 
 Backend (NestJS)
 ✅ Récupération des tâches (déjà implémenté)
@@ -63,7 +63,7 @@ Frontend (React)
 ✨ Bonus : Effectuer une recherche de tache en fonction des caractère du nom
 
 
-🧠 Choix techniques & décisions
+## 🧠 Choix techniques & décisions
 Yarn a été utilisé à la place de npm comme demandé.
 
 Prisma facilite la gestion de la base de données et les migrations.
@@ -74,7 +74,7 @@ React pour un frontend rapide et fluide.
 
 XAMPP pour MySQL : configuration rapide et present en local.
 
-🧩 Difficultés rencontrées
+## 🧩 Difficultés rencontrées
 
 
 Problème de connexion à la base au début → réglé en ajustant .env
@@ -83,14 +83,14 @@ Quelques ajustements nécessaires dans le typage des DTO côté NestJS
 
 Gestion des états dans le frontend un peu tricky avec l’édition en ligne
 
-📹 Démonstration
+## 📹 Démonstration
 👉 Vidéo de démonstration ici : (https://drive.google.com/file/d/1OUJ7Ngx3zgChssA58uuzUG8ZL_8orGp-/view?usp=sharing)
 
-📂 Repos GitHub
+## 📂 Repos GitHub
 Frontend(https://github.com/Gbane26/frontend)
 
 Backend(https://github.com/Gbane26/backend)
 
-🙏 Remerciements
+## 🙏 Remerciements
 Merci pour ce test enrichissant qui m’a permis de combiner développement frontend & backend avec une stack moderne.
 
